@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-apply plugin:'com.demo.plugin'
+
 
 android {
     compileSdkVersion 29
@@ -20,6 +20,7 @@ android {
         }
     }
 }
+apply plugin:'com.demo.plugin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
