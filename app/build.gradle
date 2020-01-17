@@ -29,4 +29,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+
+    // ASM 相关 test中使用
+
+    testImplementation 'org.ow2.asm:asm:7.1'
+    testImplementation 'org.ow2.asm:asm-util:7.1'
+    //ASM工具类
+    testImplementation 'org.ow2.asm:asm-commons:7.1'
 }
