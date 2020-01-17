@@ -11,7 +11,7 @@ public class InjectTest {
         long e=System.currentTimeMillis();
 
 
-        System.out.println("e-s="+(e-s));
+        System.out.println("====class:"+Thread.currentThread().getStackTrace()[1].getClassName()+"=======method:"+Thread.currentThread().getStackTrace()[1].getMethodName()+"===time:"+(e-s)+"ms");
     }
 
     public InjectTest()

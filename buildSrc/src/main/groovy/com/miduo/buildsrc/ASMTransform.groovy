@@ -51,17 +51,55 @@ class ASMTransform extends Transform
             it.jarInputs.each {
                 File dest=outputProvider.getContentLocation(it.name,
                     it.contentTypes,it.scopes, Format.JAR)
+
+                println(dest.path)
+                //jar包直接拷贝
                 FileUtils.copyFile(it.file,dest)
             }
 
             it.directoryInputs.each {
                 File dest=outputProvider.getContentLocation(it.name,
                     it.contentTypes,it.scopes,Format.DIRECTORY)
-                FileUtils.copyDirectory(it.file,dest)
+                println("dir:${dest.path}")
+                transformDir(it.file,dest)
             }
         }
         //
 
 
     }
+
+    void transformDir(File from, File to)
+    {
+        FileUtils.copyDirectory(from,to)
+
+        //注意这儿是to
+        //这儿的思想是先把class全部复制过去，然后再修改class，就是覆盖更新
+        transformFile(to)
+
+    }
+    ASMUnitTest asmUnitTest
+    void transformFile(File file)
+    {
+        file.listFiles().each {
+            if(it.isDirectory())
+            {
+                transformFile(it)
+            }
+            else if(it.isFile())
+            {
+                println("这是一个文件${it.path}")
+                if(asmUnitTest==null)
+                {
+                    asmUnitTest=new ASMUnitTest()
+                }
+                asmUnitTest.test(it.path)
+            }
+
+        }
+    }
+
+
+
+
 }
