@@ -1,5 +1,13 @@
 //测试一下分支修改：这是buildsrc_branch分支
 
-自定义插件的步骤参考：https://juejin.im/post/5cce895f51882541e27b0cae#heading-11
+这种方式就比较简单了：也比较容易调试
 
-    参考里面得到第三种办法，我们直接新建一个library的module，然后修改里面的文件结构
+调试步骤：参考https://juejin.im/post/5b3b44105188251b134e4f56
+
+    1、Android Studio中按照如下步骤操作：
+      Menu → Run → Edit Configurations... → Add New Configuration → Remote → 自定义配置name → host: localhost → port: 5005 → OK
+
+    2、./gradlew <任务名> -Dorg.gradle.daemon=false -Dorg.gradle.debug=true
+        例如： ./gradlew assembleDebug -Dorg.gradle.daemon=false -Dorg.gradle.debug=true
+
+    3、切换到第一步新建的remote任务，执行后面的debug即可

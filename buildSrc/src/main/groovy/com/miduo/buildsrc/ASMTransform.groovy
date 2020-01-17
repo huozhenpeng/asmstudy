@@ -1,15 +1,9 @@
-package com.demo.plugin
+package com.miduo.buildsrc
 
-import com.android.build.api.transform.Format
-import com.android.build.api.transform.QualifiedContent
-import com.android.build.api.transform.Transform
-import com.android.build.api.transform.TransformException
-import com.android.build.api.transform.TransformInvocation
+import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.utils.FileUtils
 import org.gradle.api.Project
-import org.gradle.internal.impldep.org.apache.ivy.util.FileUtil
-
 
 class ASMTransform extends Transform
 {
@@ -40,7 +34,6 @@ class ASMTransform extends Transform
     boolean isIncremental() {
         return true
     }
-
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation)

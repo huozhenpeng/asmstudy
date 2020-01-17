@@ -20,7 +20,7 @@ android {
         }
     }
 }
-apply plugin:'com.demo.plugin'
+apply plugin:'com.miduo.buildsrc'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

@@ -1,4 +1,4 @@
-package com.demo.plugin
+package com.miduo.buildsrc
 
 
 import com.android.build.gradle.AppExtension
