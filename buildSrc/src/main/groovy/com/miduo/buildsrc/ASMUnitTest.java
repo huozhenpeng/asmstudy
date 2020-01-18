@@ -82,6 +82,7 @@ public class ASMUnitTest {
             {
                 return;
             }
+
             invokeStatic(Type.getType("Ljava/lang/System;"),new Method("currentTimeMillis","()J"));
             //这个e表示的是索引，并不是本地变量的类型
             int e=newLocal(Type.LONG_TYPE);
@@ -105,34 +106,30 @@ public class ASMUnitTest {
 
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
 
-            //表示的是this
-            visitVarInsn(ALOAD,0);
+            invokeStatic(Type.getType("Ljava/lang/Thread;"),new Method("currentThread","()Ljava/lang/Thread;"));
 
-            invokeVirtual(Type.getType("Ljava/lang/Object;"),new Method("getClass","()Ljava/lang/Class;"));
+            invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
 
-            invokeVirtual(Type.getType("Ljava/lang/Class;"),new Method("getName","()Ljava/lang/String;"));
+            visitInsn(ICONST_2);
+
+            visitInsn(AALOAD);
+            invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getClassName","()Ljava/lang/String;"));
 
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
 
             visitLdcInsn("=======method:");
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
-
-
             invokeStatic(Type.getType("Ljava/lang/Thread;"),new Method("currentThread","()Ljava/lang/Thread;"));
-
             invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
 
-            //访问数组第二个元素
             visitInsn(ICONST_2);
-
             visitInsn(AALOAD);
-            invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getMethodName","()Ljava/lang/String;"));
 
+            invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getMethodName","()Ljava/lang/String;"));
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
 
             visitLdcInsn("===time:");
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
-
             loadLocal(e);
             loadLocal(s);
             //lsub执行减法指令,第二个参数是返回值
@@ -145,7 +142,6 @@ public class ASMUnitTest {
 
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("toString","()Ljava/lang/String;"));
             invokeVirtual(Type.getType("Ljava/io/PrintStream;"),new Method("println","(Ljava/lang/String;)V"));
-
 
         }
     }

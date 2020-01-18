@@ -2,6 +2,7 @@ package com.miduo.asmstudy;
 
 public class SingleTon {
 
+    @ASMTest
     public static void  doSomeThing()
     {
         try {
