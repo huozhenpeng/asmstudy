@@ -17,3 +17,9 @@
 关于在方法内部获取Java   Android中的方法名：
 
     参考：https://mupceet.com/2017/04/java&android-get-current-method-name/
+
+
+
+经测试：这个才是通用的方法，在普通方法和静态方法都适用
+
+        System.out.println("====class:" +Thread.currentThread().getStackTrace()[2].getClassName()+ "=======method:" + Thread.currentThread().getStackTrace()[2].getMethodName() + "===time:" + (var3 - var1) + "ms");
