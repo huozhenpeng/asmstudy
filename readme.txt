@@ -11,3 +11,9 @@
         例如： ./gradlew assembleDebug -Dorg.gradle.daemon=false -Dorg.gradle.debug=true
 
     3、切换到第一步新建的remote任务，执行后面的debug即可
+
+
+
+关于在方法内部获取Java   Android中的方法名：
+
+    参考：https://mupceet.com/2017/04/java&android-get-current-method-name/

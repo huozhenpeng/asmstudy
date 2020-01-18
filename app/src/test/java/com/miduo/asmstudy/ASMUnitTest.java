@@ -102,19 +102,48 @@ public class ASMUnitTest {
             //调用StringBuilder的构造方法
             invokeConstructor(Type.getType("Ljava/lang/StringBuilder;"),new Method("<init>","()V"));
 
-            visitLdcInsn("e-s");
+
+            visitLdcInsn("====class:");
+
 
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
 
+            invokeStatic(Type.getType("Ljava/lang/Thread;"),new Method("currentThread","()Ljava/lang/Thread;"));
+
+            invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
+
+            visitInsn(ICONST_1);
+
+            visitInsn(AALOAD);
+            invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getClassName","()Ljava/lang/String;"));
+
+            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
+
+            visitLdcInsn("=======method:");
+            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
+            invokeStatic(Type.getType("Ljava/lang/Thread;"),new Method("currentThread","()Ljava/lang/Thread;"));
+            invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
+
+            visitInsn(ICONST_1);
+            visitInsn(AALOAD);
+
+            invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getMethodName","()Ljava/lang/String;"));
+            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
+
+            visitLdcInsn("===time:");
+            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
             loadLocal(e);
             loadLocal(s);
             //lsub执行减法指令,第二个参数是返回值
             math(SUB,Type.LONG_TYPE);
 
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(J)Ljava/lang/StringBuilder;"));
+
+            visitLdcInsn("ms");
+            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
+
             invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("toString","()Ljava/lang/String;"));
             invokeVirtual(Type.getType("Ljava/io/PrintStream;"),new Method("println","(Ljava/lang/String;)V"));
-
 
         }
     }
