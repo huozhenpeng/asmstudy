@@ -24,3 +24,8 @@
         System.out.println("====class:" +Thread.currentThread().getStackTrace()[2].getClassName()+ "=======method:" + Thread.currentThread().getStackTrace()[2].getMethodName() + "===time:" + (var3 - var1) + "ms");
 
 
+记录git的一点问题：
+
+     版本回退：git reset --hard 提交的日志版本号
+
+     如果回退是误操作的，怎么恢复呢：git reflog 找到所有的日志记录，再利用git reset --hard
