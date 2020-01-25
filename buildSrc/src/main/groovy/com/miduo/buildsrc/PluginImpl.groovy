@@ -15,6 +15,8 @@ class PluginImpl  implements Plugin<Project> {
 
 //        project.extensions.getByType(AppExtension).registerTransform(new ASMTransform(project))
 
+        def extension=project.extensions.create('config',ConfigurationEntity)
+
         def android = project.extensions.getByType(AppExtension)
         if(android==null)
         {
@@ -24,7 +26,10 @@ class PluginImpl  implements Plugin<Project> {
         {
             println "android 不为null"
         }
+        project.afterEvaluate {
 //        android.registerTransform(new ASMTransform(project))
-        android.registerTransform(new ASMTransform(project))
+            android.registerTransform(new ASMTransform(project,extension.time))
+        }
+
     }
 }

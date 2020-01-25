@@ -3,13 +3,31 @@ package com.miduo.asmstudy;
 
 public class InjectTest {
 
+    private int f;
     @ASMTest
     public static void main(String[] args) throws InterruptedException {
 
-        long var1 = System.currentTimeMillis();
-        Thread.sleep(1000L);
-        long var3 = System.currentTimeMillis();
-        System.out.println("====class:" + Thread.currentThread().getStackTrace()[1].getClassName() + "=======method:" + Thread.currentThread().getStackTrace()[1].getMethodName() + "===time:" + (var3 - var1) + "ms");
+        Thread.sleep(1000);
+        int a=10;
+        int b=5;
+
+        if(a>b)
+        {
+            System.out.println("111111111111");
+
+        }
+        else
+        {
+            System.out.println("22222222222 ");
+        }
+    }
+
+    public void checkAndSetF(int f) {
+        if (f >= 0) {
+            this.f = f;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public InjectTest() throws InterruptedException {

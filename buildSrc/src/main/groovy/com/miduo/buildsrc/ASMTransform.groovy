@@ -8,10 +8,14 @@ import org.gradle.api.Project
 class ASMTransform extends Transform
 {
     Project project
+    int time
 
-    ASMTransform(Project project)
+    ASMTransform(Project project,int time)
     {
         this.project=project
+        this.time=time
+
+        println("当前配置的时间:${time}")
     }
 
     //这个是task的名字
@@ -91,7 +95,7 @@ class ASMTransform extends Transform
                 println("这是一个文件${it.path}")
                 if(asmUnitTest==null)
                 {
-                    asmUnitTest=new ASMUnitTest()
+                    asmUnitTest=new ASMUnitTest(time)
                 }
                 asmUnitTest.test(it.path)
             }

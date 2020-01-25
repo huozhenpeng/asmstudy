@@ -22,6 +22,11 @@ android {
 }
 apply plugin:'com.miduo.buildsrc'
 
+//配置过滤时间
+config {
+    time 200
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'

@@ -1,11 +1,10 @@
-package com.miduo.buildsrc;
+package com.miduo.asmstudy;
 
-import org.gradle.internal.impldep.org.objectweb.asm.tree.analysis.Frame;
+import org.junit.Test;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -14,17 +13,10 @@ import org.objectweb.asm.commons.Method;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-public class ASMUnitTest {
+public class ASMUnitTest2 {
 
-    public ASMUnitTest(int time)
-    {
-        this.time=time;
-    }
-
-    int time;
     static class MyClassVisitor extends ClassVisitor
     {
 
@@ -60,7 +52,7 @@ public class ASMUnitTest {
         boolean inject=false;
         @Override
         public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-            System.out.println("------------"+getName()+"   "+descriptor);
+            System.out.println(getName()+"   "+descriptor);
             if("Lcom/miduo/asmstudy/ASMTest;".equals(descriptor))
             {
                 inject=true;
@@ -86,6 +78,7 @@ public class ASMUnitTest {
 
         @Override
         protected void onMethodExit(int opcode) {
+            super.onMethodExit(opcode);
             if(!inject)
             {
                 return;
@@ -96,17 +89,6 @@ public class ASMUnitTest {
             int e=newLocal(Type.LONG_TYPE);
             //用一个本地变量接收上一步执行的结果
             storeLocal(e);
-
-            loadLocal(e);
-            loadLocal(s);
-            math(SUB,Type.LONG_TYPE);
-            //加载this
-            visitVarInsn(ALOAD,0);
-            getField(Type.getType("Lcom/miduo/buildsrc/ASMUnitTest;"),"time",Type.getType("I"));
-            visitInsn(I2L);
-            visitInsn(LCMP);
-            Label label=new Label();
-            visitJumpInsn(IFLE,label);
 
             //获取System中的out成员
             getStatic(Type.getType("Ljava/lang/System;"),"out",Type.getType("Ljava/io/PrintStream;"));
@@ -129,7 +111,7 @@ public class ASMUnitTest {
 
             invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
 
-            visitInsn(ICONST_2);
+            visitInsn(ICONST_1);
 
             visitInsn(AALOAD);
             invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getClassName","()Ljava/lang/String;"));
@@ -141,7 +123,7 @@ public class ASMUnitTest {
             invokeStatic(Type.getType("Ljava/lang/Thread;"),new Method("currentThread","()Ljava/lang/Thread;"));
             invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
 
-            visitInsn(ICONST_2);
+            visitInsn(ICONST_1);
             visitInsn(AALOAD);
 
             invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getMethodName","()Ljava/lang/String;"));
@@ -165,6 +147,7 @@ public class ASMUnitTest {
         }
     }
 
+    @Test
     public void getPath()
     {
         //user.dir指定了当前的路径
@@ -172,12 +155,12 @@ public class ASMUnitTest {
         System.out.println(System.getProperty("user.dir"));
     }
 
-    public void test(String path) throws Exception {
+    @Test
+    public void test() throws Exception {
 
 
         //获取class数据
-        //FileInputStream fileInputStream=new FileInputStream(new File("src/test/java/com/miduo/asmstudy/InjectTest.class"));
-        FileInputStream fileInputStream=new FileInputStream(new File(path));
+        FileInputStream fileInputStream=new FileInputStream(new File("src/test/java/com/miduo/asmstudy/InjectTest.class"));
 
         //class分析器
         ClassReader classReader=new ClassReader(fileInputStream);
@@ -194,8 +177,7 @@ public class ASMUnitTest {
         //执行了插桩之后的字节码文件
         byte[] bytes=classWriter.toByteArray();
         //对字节码进行替换
-        //FileOutputStream fileOutputStream=new FileOutputStream(new File("src/test/java/com/miduo/asmstudy/InjectTest2.class"));
-        FileOutputStream fileOutputStream=new FileOutputStream(new File(path));
+        FileOutputStream fileOutputStream=new FileOutputStream(new File("src/test/java/com/miduo/asmstudy/InjectTest_c.class"));
         fileOutputStream.write(bytes);
         fileInputStream.close();
 

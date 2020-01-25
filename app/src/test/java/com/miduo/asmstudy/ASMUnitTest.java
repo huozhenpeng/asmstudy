@@ -5,6 +5,7 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -84,69 +85,54 @@ public class ASMUnitTest {
             {
                 return;
             }
+                visitIntInsn(BIPUSH,10);
+                visitVarInsn(ISTORE,1);
 
-            invokeStatic(Type.getType("Ljava/lang/System;"),new Method("currentTimeMillis","()J"));
-            //这个e表示的是索引，并不是本地变量的类型
-            int e=newLocal(Type.LONG_TYPE);
-            //用一个本地变量接收上一步执行的结果
-            storeLocal(e);
+                visitInsn(ICONST_5);
+                visitVarInsn(ISTORE,2);
 
-            //获取System中的out成员
-            getStatic(Type.getType("Ljava/lang/System;"),"out",Type.getType("Ljava/io/PrintStream;"));
-
-            //实例化StringBuilder
-            newInstance(Type.getType("Ljava/lang/StringBuilder;"));
-
-            dup();
-
-            //调用StringBuilder的构造方法
-            invokeConstructor(Type.getType("Ljava/lang/StringBuilder;"),new Method("<init>","()V"));
+                visitVarInsn(ILOAD,1);
+                visitVarInsn(ILOAD,2);
 
 
-            visitLdcInsn("====class:");
+
+                Label label=new Label();
+                visitJumpInsn(IF_ICMPLE,label);
+                getStatic(Type.getType("Ljava/lang/System;"),"out",Type.getType("Ljava/io/PrintStream;"));
+                visitLdcInsn("111111111111");
+
+                invokeVirtual(Type.getType("Ljava/io/PrintStream;"),new Method("println","(Ljava/lang/String;)V"));
+
+                Label end=new Label();
+                visitJumpInsn(GOTO,end);
+
+                visitLabel(label);
+                //点进去看一下，只能用这个Opcodes.F_NEW
+                visitFrame(Opcodes.F_NEW,2,new Object [] {Opcodes.INTEGER,Opcodes.INTEGER},0,null);
+                getStatic(Type.getType("Ljava/lang/System;"),"out",Type.getType("Ljava/io/PrintStream;"));
+                visitLdcInsn("222222222222");
+                invokeVirtual(Type.getType("Ljava/io/PrintStream;"),new Method("println","(Ljava/lang/String;)V"));
 
 
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
+                //return
+                visitLabel(end);
+                visitFrame(Opcodes.F_NEW,0,null,0,null);
 
-            invokeStatic(Type.getType("Ljava/lang/Thread;"),new Method("currentThread","()Ljava/lang/Thread;"));
+                //经过测试在onMethodExit方法中不能调用这个代码，否则死循环
+//                visitInsn(Opcodes.RETURN);
+//                visitMaxs(2,2);
 
-            invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
-
-            visitInsn(ICONST_1);
-
-            visitInsn(AALOAD);
-            invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getClassName","()Ljava/lang/String;"));
-
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
-
-            visitLdcInsn("=======method:");
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
-            invokeStatic(Type.getType("Ljava/lang/Thread;"),new Method("currentThread","()Ljava/lang/Thread;"));
-            invokeVirtual(Type.getType("Ljava/lang/Thread;"),new Method("getStackTrace","()[Ljava/lang/StackTraceElement;"));
-
-            visitInsn(ICONST_1);
-            visitInsn(AALOAD);
-
-            invokeVirtual(Type.getType("Ljava/lang/StackTraceElement;"),new Method("getMethodName","()Ljava/lang/String;"));
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
-
-            visitLdcInsn("===time:");
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
-            loadLocal(e);
-            loadLocal(s);
-            //lsub执行减法指令,第二个参数是返回值
-            math(SUB,Type.LONG_TYPE);
-
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(J)Ljava/lang/StringBuilder;"));
-
-            visitLdcInsn("ms");
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("append","(Ljava/lang/String;)Ljava/lang/StringBuilder;"));
-
-            invokeVirtual(Type.getType("Ljava/lang/StringBuilder;"),new Method("toString","()Ljava/lang/String;"));
-            invokeVirtual(Type.getType("Ljava/io/PrintStream;"),new Method("println","(Ljava/lang/String;)V"));
 
         }
+
+
+        @Override
+        public void visitInsn(int opcode) {
+            super.visitInsn(opcode);
+        }
     }
+
+
 
     @Test
     public void getPath()
@@ -178,7 +164,7 @@ public class ASMUnitTest {
         //执行了插桩之后的字节码文件
         byte[] bytes=classWriter.toByteArray();
         //对字节码进行替换
-        FileOutputStream fileOutputStream=new FileOutputStream(new File("src/test/java/com/miduo/asmstudy/InjectTest2.class"));
+        FileOutputStream fileOutputStream=new FileOutputStream(new File("src/test/java/com/miduo/asmstudy/InjectTest_c.class"));
         fileOutputStream.write(bytes);
         fileInputStream.close();
 
